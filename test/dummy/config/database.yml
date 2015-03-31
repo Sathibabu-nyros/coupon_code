@@ -1,0 +1,13 @@
+
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: root
+  password: 
+
+
+development:
+  <<: *default
+  database: coupons_code
+
