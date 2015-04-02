@@ -9,14 +9,14 @@ module CouponsCode
       validates_presence_of :code, :valid_from
       validates_uniqueness_of :code
       validates_numericality_of :redemption_limit, greater_than_or_equal_to: 0
-      # validates_numericality_of :amount,
-      #               greater_than_or_equal_to: 0,
-      #               less_than_or_equal_to: 100,
-      #               only_integer: true, if self.discount_type == 'percentage'
+      validates_numericality_of :amount,
+                    greater_than_or_equal_to: 0,
+                    less_than_or_equal_to: 100,
+                    only_integer: true, if: Proc.new { self.discount_type == 'percentage'}  
                     
-      # validates_numericality_of :amount,
-      #               greater_than_or_equal_to: 0,
-      #               only_integer: true, if self.discount_type == 'amount'
+      validates_numericality_of :amount,
+                    greater_than_or_equal_to: 0,
+                    only_integer: true, if: Proc.new {self.discount_type == 'amount' }
                     
       validate :validate_dates
 
@@ -25,7 +25,7 @@ module CouponsCode
         puts input_amount = BigDecimal("#{options[:amount]}")
         puts discount = BigDecimal(percentage_based? ? percentage_discount(options[:amount],@coupon.amount) : @coupon.amount)
         total = [0, input_amount - discount].max        
-        options = options.merge(total: total, discount: discount)        
+        options = options.merge(total: total, discount: discount, error: 'success')        
         options
       end
 

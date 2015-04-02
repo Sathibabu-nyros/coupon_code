@@ -1,3 +1,5 @@
+<div class="panel panel-default">
+  <div class="panel-body">
 <%= form_for(@coupon) do |f| %>
   <% if @coupon.errors.any? %>
     <div id="error_explanation">
@@ -23,26 +25,27 @@
     <%= f.date_field :valid_from,:class =>"form-control" %>
   </div>
   <div class="form-group">
-    <%= f.label :valid_until %><br>
+    <%= f.label :valid_until, "Valid until  (When will this coupon expire. By default, it does not expire.)" %><br>
     <%= f.date_field :valid_until,:class =>"form-control" %>
   </div>
   <div class="form-group">
-    <%= f.label :redemption_limit, "Coupons Limit" %><br>
-    <%= f.text_field :redemption_limit,:class =>"form-control" %>
+    <%= f.label :redemption_limit, "Coupons Limit  (Set how many times this coupon can be used. Zero means no limit.)" %><br>
+    <%= f.number_field :redemption_limit,:class =>"form-control" %>
   </div> 
   <div class="form-group">
     <%= f.label :discount_type %><br>
-    <%= f.select :discount_type, options_for_select([ "Amount", "Percentage"]),:class =>"form-control" %>
+    <%= f.select :discount_type, options_for_select([ ["Percentage",'percentage'],["Amount",'amount']],:selected => @coupon.discount_type),{},:class =>"form-control" %>
   </div>  
   <div class="form-group">
-    <%= f.label :amount %><br>
+    <%= f.label :amount, "Amount  (This is the actual discount amount. 0-100 for percentage, zero or positive number for amount.)" %><br>
     <%= f.text_field :amount,:class =>"form-control" %>
   </div>  
   
- 
-
-
-  <div class="actions">
-    <%= f.submit %>
+ <div class="form-actions">
+    <%= f.submit :class => "btn btn-success"%> <%= link_to 'Back', coupons_path ,:class => "btn btn-danger"%>
   </div>
+
 <% end %>
+
+  </div>
+    </div>

@@ -1,27 +1,27 @@
 module CouponsCode
   module CouponsHelper
 
-  	def apply(code, options)
-    
-      options[:discount] = 0
-      options[:total] = options[:amount]
+      def coupon_discount(coupon)       
+        return  "#{coupon.amount}% OFF"  if coupon.discount_type == 'percentage'       
+        return  "$#{coupon.amount} OFF"       
+      end
 
-      coupon = find(code, options)
-      return options unless coupon
+      def redeemed(coupon)
+        limit = coupon.redemption_limit
+        return "Not yet" if limit == 0
+        return "#{coupon.coupon_redemptions_count} / #{coupon.redemption_limit}" if limit >  0
+      end
 
-      coupon.apply(options)
-    end
+       def valid_until(coupon)
+         if coupon.valid_until?
+         short_date(coupon.valid_until)
+         else
+         "Never"
+         end
+       end
 
-    # Create a new coupon code.
-    def create(options)
-      ::Coupons::Models::Coupon.create!(options)
-    end
-
-    # Find a valid coupon by its code.
-    # It takes starting/ending date, and redemption count in consideration.
-    def find(code, options)
-      Coupons.configuration.finder.call(code, options)
-    end
-
+       def short_date(date)
+         date.to_formatted_s(:long)
+       end
   end
 end
