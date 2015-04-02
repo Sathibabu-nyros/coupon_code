@@ -1,3 +1,83 @@
-= CouponsCode
 
-This project rocks and uses MIT-LICENSE.
+Coupons is a Rails engine for creating discount coupons.
+
+# Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'coupons_code'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install coupons_code
+
+## Usage
+
+After installing `CouponsCode`, add the following line to your `config/routes.rb` file.
+
+
+    mount Coupons::Engine => '/', as: 'coupons_code'
+    
+    You can visit `/coupons` to access the dashboard.
+
+## Creating coupons
+
+There are two types of coupons: percentage or amount.
+
+- **percentage**: applies the percentage discount to total amount.
+- **amount**: applies the amount discount to the total amount.
+
+
+
+You can always override the generated coupon code through the dashboard or Ruby.
+
+### Working with coupons
+
+Imagine that you created the coupon `RAILSCONF15` as a $100 discount; you can apply it to any amount using the `Coupons.apply` method. Notice that this method won't redeem the coupon code and it's supposed to be used on the checkout page.
+
+
+    Coupons.apply('RAILSCONF15', amount: 600.00)
+    #=> {:amount => 600.0, :discount => 100.0, :total => 500.0, :error => 'success'}
+
+
+When a coupon is invalid/non-redeemable, it returns the discount amount as `0`.
+
+
+    Coupons.apply('invalid', amount: 100.00)
+    #=> {:amount => 100.0, :discount => 0, :total => 100.0, :error => 'invalid'}
+
+
+To redeem the coupon you can use `Coupon.redeem`.
+
+
+    Coupons.redeem('RAILSCONF15', amount: 600.00)
+    #=> {:amount => 600.0, :discount => 100.0, :total => 500.0, :error => 'success'}
+
+
+
+### JSON endpoint
+
+You may want to apply discounts using AJAX, so you can give instant feedback. In this case, you'll find the `/coupons/apply` endpoint useful.
+
+    javascript
+    var response = $.get('/coupons/apply', {amount: 600.0, coupon: 'RAILSCONF15'});
+    response.done(function(options)) {
+      console.log(options);
+      //=> {amount: 600.0, discount: 100.0, total: 500.0}
+    });
+
+
+If you provide invalid amount/coupon, then it'll return zero values, like `{amount: 0, discount: 0, total: 0}`.
+
+## Contributing
+
+1. Before implementing anything, create an issue to discuss your idea. This only applies to big changes and new features.
+2. Fork it (https://github.com/Sathibabu-P/coupon_code/fork )
+3. Create your feature branch (`git checkout -b my-new-feature`)
+4. Commit your changes (`git commit -am 'Add some feature'`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create a new Pull Request
