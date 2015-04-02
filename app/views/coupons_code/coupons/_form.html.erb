@@ -27,13 +27,18 @@
     <%= f.date_field :valid_until,:class =>"form-control" %>
   </div>
   <div class="form-group">
-    <%= f.label :redemption_limit %><br>
+    <%= f.label :redemption_limit, "Coupons Limit" %><br>
     <%= f.text_field :redemption_limit,:class =>"form-control" %>
   </div> 
+  <div class="form-group">
+    <%= f.label :discount_type %><br>
+    <%= f.select :discount_type, options_for_select([ "Amount", "Percentage"]),:class =>"form-control" %>
+  </div>  
   <div class="form-group">
     <%= f.label :amount %><br>
     <%= f.text_field :amount,:class =>"form-control" %>
   </div>  
+  
  
 
 

@@ -9,9 +9,7 @@ module CouponsCode
       @coupons = Coupon.all
     end
 
-    # GET /coupons/1
-    def show
-    end
+    
 
     # GET /coupons/new
     def new
@@ -24,10 +22,9 @@ module CouponsCode
 
     # POST /coupons
     def create
-      @coupon = Coupon.new(coupon_params)
-
+      @coupon = Coupon.new(coupon_params)     
       if @coupon.save
-        redirect_to @coupon, notice: 'Coupon was successfully created.'
+        redirect_to coupons_path, notice: 'Coupon was successfully created.'
       else
         render :new
       end
@@ -36,7 +33,7 @@ module CouponsCode
     # PATCH/PUT /coupons/1
     def update
       if @coupon.update(coupon_params)
-        redirect_to @coupon, notice: 'Coupon was successfully updated.'
+       redirect_to coupons_path, notice: 'Coupon was successfully updated.'
       else
         render :edit
       end
@@ -56,7 +53,7 @@ module CouponsCode
 
       # Only allow a trusted parameter "white list" through.
       def coupon_params
-        params[:coupon]
+      params.require(:coupon).permit(:code,:description,:valid_from,:valid_until,:amount,:redemption_limit,:discount_type)
       end
   end
 end
